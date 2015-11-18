@@ -9,19 +9,38 @@
 import Cocoa
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
-
+class AppDelegate: NSObject, NSApplicationDelegate
+{
     @IBOutlet weak var window: NSWindow!
-
-
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
-        // Insert code here to initialize your application
+    @IBOutlet weak var view:   NSView!
+    
+    var myArray = [[String:AnyObject]]()
+    {
+        didSet
+        {
+            NSLog( "did set" )
+        }
     }
-
-    func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear down your application
+    
+    override func view(view: NSView, stringForToolTip tag: NSToolTipTag, point: NSPoint, userData data: UnsafeMutablePointer<Void>) -> String
+    {
+        let pUserData = UnsafeMutablePointer<[String:AnyObject]>(data)
+        let userData  = pUserData.memory
+        
+        return "hello"
     }
-
-
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        self.myArray.append( [ "one" : "a" ] )
+        self.myArray.append( [ "two" : "b" ] )
+        
+        view.addToolTipRect( NSMakeRect( 0, 0, 100, 100), owner: self, userData: &(myArray[0]) )
+    }
+    
+    
+    
+    func applicationWillTerminate(aNotification: NSNotification)
+    {
+    }
 }
-
